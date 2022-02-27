@@ -1,4 +1,4 @@
-# Copyright 2022 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -17,7 +17,6 @@ KEYWORDS="~amd64 ~x86"
 IUSE="+bundled-jdk"
 RESTRICT="mirror"
 
-DEPEND=""
 RDEPEND="!bundled-jdk? ( >=virtual/jre-1.8 )
 	app-arch/brotli
 	app-arch/zstd
@@ -57,7 +56,7 @@ RDEPEND="!bundled-jdk? ( >=virtual/jre-1.8 )
 BDEPEND="dev-util/patchelf"
 
 
-QA_PREBUILT="opt/${P}/*"
+QA_PREBUILT="opt/${PN}/*"
 
 
 src_prepare() {
@@ -69,6 +68,7 @@ src_prepare() {
 	rm -v plugins/performanceTesting/bin/libyjpagent.dylib || die
 	rm -vr lib/pty4j-native/linux/{aarch64,arm,mips64el,ppc64le,x86} || die
 	rm -v plugins/python/helpers/pydev/pydevd_attach_to_process/attach_linux_x86.so || die
+	rm -vr plugins/wsl-fs-helper || die
 
 	sed -i \
 		-e "\$a\\\\" \
