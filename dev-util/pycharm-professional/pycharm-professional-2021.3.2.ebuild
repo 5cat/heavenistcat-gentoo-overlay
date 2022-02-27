@@ -1,21 +1,23 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-inherit desktop readme.gentoo-r1 wrapper xdg-utils
+inherit desktop readme.gentoo-r1 wrapper xdg
 
+MY_PN=${PN/-professional/}
 DESCRIPTION="Intelligent Python IDE with unique code assistance and analysis"
 HOMEPAGE="http://www.jetbrains.com/pycharm/"
 SRC_URI="http://download.jetbrains.com/python/${P}.tar.gz"
+S="${WORKDIR}/${MY_PN}-${PV}"
 
 LICENSE="PyCharm_Academic PyCharm_Classroom PyCharm PyCharm_OpenSource PyCharm_Preview"
 SLOT="0"
-KEYWORDS="amd64 x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="+bundled-jdk"
+RESTRICT="mirror"
 
-BDEPEND="dev-util/patchelf"
-
+DEPEND=""
 RDEPEND="!bundled-jdk? ( >=virtual/jre-1.8 )
 	app-arch/brotli
 	app-arch/zstd
@@ -52,26 +54,21 @@ RDEPEND="!bundled-jdk? ( >=virtual/jre-1.8 )
 	x11-libs/libXtst
 	x11-libs/pango
 "
+BDEPEND="dev-util/patchelf"
 
-RESTRICT="mirror"
 
 QA_PREBUILT="opt/${P}/*"
 
-MY_PN=${PN/-professional/}
-S="${WORKDIR}/${MY_PN}-${PV}"
 
 src_prepare() {
 	default
 
-	rm -vf "${S}"/help/ReferenceCardForMac.pdf || die
-
-	rm -vf "${S}"/bin/phpstorm.vmoptions || die
-
-	rm -vf "${S}"/plugins/performanceTesting/bin/libyjpagent.so || die
-	rm -vf "${S}"/plugins/performanceTesting/bin/*.dll || die
-	rm -vf "${S}"/plugins/performanceTesting/bin/libyjpagent.dylib || die
-	rm -vrf "${S}"/lib/pty4j-native/linux/{aarch64,arm,mips64el,ppc64le,x86} || die
-	rm -vf "${S}"/plugins/python-ce/helpers/pydev/pydevd_attach_to_process/attach_linux_x86.so
+	rm -v help/ReferenceCardForMac.pdf || die
+	rm -v plugins/performanceTesting/bin/libyjpagent.so || die
+	rm -v plugins/performanceTesting/bin/*.dll || die
+	rm -v plugins/performanceTesting/bin/libyjpagent.dylib || die
+	rm -vr lib/pty4j-native/linux/{aarch64,arm,mips64el,ppc64le,x86} || die
+	rm -v plugins/python/helpers/pydev/pydevd_attach_to_process/attach_linux_x86.so || die
 
 	sed -i \
 		-e "\$a\\\\" \
@@ -79,7 +76,8 @@ src_prepare() {
 		-e "\$a# Disable automatic updates as these are handled through Gentoo's" \
 		-e "\$a# package manager. See bug #704494" \
 		-e "\$a#-----------------------------------------------------------------------" \
-		-e "\$aide.no.platform.update=Gentoo" bin/idea.properties
+		-e "\$aide.no.platform.update=Gentoo" \
+		bin/idea.properties || die
 
 	for file in "jbr/lib/"/{libjcef.so,jcef_helper}
 	do
@@ -109,17 +107,14 @@ src_install() {
 	newicon bin/${MY_PN}.png ${PN}.png
 	make_desktop_entry ${PN} ${PN} ${PN}
 
+	readme.gentoo_create_doc
 
 	# recommended by: https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
-	dodir /etc/sysctl.d/
-	echo "fs.inotify.max_user_watches = 524288" > "${D}/etc/sysctl.d/30-idea-inotify-watches.conf" || die
+	insinto /usr/lib/sysctl.d
+	newins - 30-idea-inotify-watches.conf <<<"fs.inotify.max_user_watches = 524288"
 }
 
 pkg_postinst() {
-	xdg_icon_cache_update
+	xdg_pkg_postinit
+	readme.gentoo_print_elog
 }
-
-pkg_postrm() {
-	xdg_icon_cache_update
-}
-
