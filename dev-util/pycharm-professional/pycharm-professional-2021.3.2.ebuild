@@ -18,40 +18,13 @@ IUSE="+bundled-jdk"
 RESTRICT="mirror"
 
 RDEPEND="!bundled-jdk? ( >=virtual/jre-1.8 )
-	app-arch/brotli
-	app-arch/zstd
-	app-crypt/p11-kit
-	dev-libs/fribidi
-	dev-libs/glib
-	dev-libs/json-c
-	dev-libs/libbsd
-	dev-libs/libdbusmenu
-	dev-libs/nss
 	dev-python/pip
 	media-fonts/dejavu
-	media-gfx/graphite2
-	media-libs/alsa-lib
-	media-libs/fontconfig
-	media-libs/freetype:2=
-	media-libs/harfbuzz
-	media-libs/libglvnd
-	media-libs/libpng:0=
-	net-libs/gnutls
-	net-print/cups
-	sys-apps/dbus
-	sys-libs/libcap
+	sys-apps/util-linux
 	sys-libs/libselinux
-	sys-libs/zlib
+	sys-libs/libxcrypt
+	sys-libs/pam
 	sys-process/audit
-	virtual/jpeg:0=
-	x11-libs/libX11
-	x11-libs/libxcb
-	x11-libs/libXext
-	x11-libs/libXi
-	x11-libs/libXrandr
-	x11-libs/libXrender
-	x11-libs/libXtst
-	x11-libs/pango
 "
 BDEPEND="dev-util/patchelf"
 
