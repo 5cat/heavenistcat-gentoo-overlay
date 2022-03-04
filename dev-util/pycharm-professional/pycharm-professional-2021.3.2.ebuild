@@ -20,11 +20,34 @@ RESTRICT="mirror"
 RDEPEND="!bundled-jdk? ( >=virtual/jre-1.8 )
 	dev-python/pip
 	media-fonts/dejavu
-	sys-apps/util-linux
-	sys-libs/libselinux
-	sys-libs/libxcrypt
-	sys-libs/pam
-	sys-process/audit
+	app-accessibility/at-spi2-atk:2
+	app-accessibility/at-spi2-core:2
+	dev-libs/atk
+	dev-libs/expat
+	dev-libs/glib:2
+	dev-libs/nspr
+	dev-libs/nss
+	media-libs/alsa-lib
+	media-libs/freetype
+	media-libs/mesa
+	net-print/cups
+	sys-apps/dbus
+	sys-libs/zlib
+	x11-libs/libdrm
+	x11-libs/libX11
+	x11-libs/libxcb
+	x11-libs/libXcomposite
+	x11-libs/libXcursor
+	x11-libs/libXdamage
+	x11-libs/libXext
+	x11-libs/libXfixes
+	x11-libs/libXi
+	x11-libs/libxkbcommon
+	x11-libs/libXrandr
+	x11-libs/libXrender
+	x11-libs/libxshmfence
+	x11-libs/libXtst
+	x11-libs/libXxf86vm
 "
 BDEPEND="dev-util/patchelf"
 
@@ -34,14 +57,23 @@ QA_PREBUILT="opt/${PN}/*"
 
 src_prepare() {
 	default
+	local REMOVE_ME=(
+		help/ReferenceCardForMac.pdf
+		lib/pty4j-native/linux/aarch64
+		lib/pty4j-native/linux/arm
+		lib/pty4j-native/linux/mips64el
+		lib/pty4j-native/linux/ppc64le
+		plugins/remote-dev-server/selfcontained
+		plugins/performanceTesting/bin/libyjpagent.so
+		plugins/performanceTesting/bin/*.dll
+		plugins/performanceTesting/bin/libyjpagent.dylib
+		plugins/python/helpers/pydev/pydevd_attach_to_process/attach_linux_x86.so
+		plugins/wsl-fs-helper
+	)
+	use amd64 || REMOVE_ME+=( lib/pty4j-native/linux/x86_64)
+	use x86 || REMOVE_ME+=( lib/pty4j-native/linux/x86)
 
-	rm -v help/ReferenceCardForMac.pdf || die
-	rm -v plugins/performanceTesting/bin/libyjpagent.so || die
-	rm -v plugins/performanceTesting/bin/*.dll || die
-	rm -v plugins/performanceTesting/bin/libyjpagent.dylib || die
-	rm -vr lib/pty4j-native/linux/{aarch64,arm,mips64el,ppc64le,x86} || die
-	rm -v plugins/python/helpers/pydev/pydevd_attach_to_process/attach_linux_x86.so || die
-	rm -vr plugins/wsl-fs-helper || die
+	rm -rv "${REMOVE_ME[@]}" || die
 
 	sed -i \
 		-e "\$a\\\\" \
