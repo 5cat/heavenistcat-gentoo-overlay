@@ -81,6 +81,7 @@ src_prepare() {
 		-e "\$aide.no.platform.update=Gentoo" \
 		bin/idea.properties || die
 
+	local file
 	for file in jbr/lib/{libjcef.so,jcef_helper}; do
 		if [[ -f ${file} ]]; then
 			patchelf --set-rpath '$ORIGIN' ${file} || die
