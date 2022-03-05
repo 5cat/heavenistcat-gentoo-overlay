@@ -51,18 +51,17 @@ RDEPEND="!bundled-jdk? ( >=virtual/jre-1.8 )
 "
 BDEPEND="dev-util/patchelf"
 
-
 QA_PREBUILT="opt/${PN}/*"
-
 
 src_prepare() {
 	default
-	local REMOVE_ME=(
+	local remove_me=(
 		help/ReferenceCardForMac.pdf
 		lib/pty4j-native/linux/aarch64
 		lib/pty4j-native/linux/arm
 		lib/pty4j-native/linux/mips64el
 		lib/pty4j-native/linux/ppc64le
+		lib/pty4j-native/linux/$(usex amd64 x86 x86_64)
 		plugins/remote-dev-server/selfcontained
 		plugins/performanceTesting/bin/libyjpagent.so
 		plugins/performanceTesting/bin/*.dll
@@ -70,10 +69,8 @@ src_prepare() {
 		plugins/python/helpers/pydev/pydevd_attach_to_process/attach_linux_x86.so
 		plugins/wsl-fs-helper
 	)
-	use amd64 || REMOVE_ME+=( lib/pty4j-native/linux/x86_64)
-	use x86 || REMOVE_ME+=( lib/pty4j-native/linux/x86)
 
-	rm -rv "${REMOVE_ME[@]}" || die
+	rm -rv "${remove_me[@]}" || die
 
 	sed -i \
 		-e "\$a\\\\" \
@@ -84,31 +81,30 @@ src_prepare() {
 		-e "\$aide.no.platform.update=Gentoo" \
 		bin/idea.properties || die
 
-	for file in "jbr/lib/"/{libjcef.so,jcef_helper}
-	do
-		if [[ -f "${file}" ]]; then
+	for file in jbr/lib/{libjcef.so,jcef_helper}; do
+		if [[ -f ${file} ]]; then
 			patchelf --set-rpath '$ORIGIN' ${file} || die
 		fi
 	done
 }
 
 src_install() {
-	local DIR="/opt/${PN}"
-	local JRE_DIR="jbr"
+	local dir="/opt/${PN}"
+	local jre_dir="jbr"
 
-	insinto ${DIR}
+	insinto ${dir}
 	doins -r *
 
 	if ! use bundled-jdk; then
-		rm -r "${JRE_DIR}" || die
+		rm -r "${jre_dir}" || die
 	fi
 
-	fperms 755 "${DIR}"/bin/{format.sh,fsnotifier,inspect.sh,ltedit.sh,printenv.py,pycharm.sh,restart.py}
+	fperms 755 ${dir}/bin/{format.sh,fsnotifier,inspect.sh,ltedit.sh,printenv.py,pycharm.sh,restart.py}
 
-	fperms 755 "${DIR}"/"${JRE_DIR}"/bin/{jaotc,java,javac,jcmd,jdb,jfr,jhsdb,jinfo,jjs,jmap,jps,jrunscript,jstack,jstat,keytool,pack200,rmid,rmiregistry,serialver,unpack200}
-	fperms 755 "${DIR}"/"${JRE_DIR}"/lib/{chrome-sandbox,jcef_helper,jexec,jspawnhelper}
+	fperms 755 ${dir}/${jre_dir}/bin/{jaotc,java,javac,jcmd,jdb,jfr,jhsdb,jinfo,jjs,jmap,jps,jrunscript,jstack,jstat,keytool,pack200,rmid,rmiregistry,serialver,unpack200}
+	fperms 755 ${dir}/${jre_dir}/lib/{chrome-sandbox,jcef_helper,jexec,jspawnhelper}
 
-	make_wrapper "${PN}" "${DIR}/bin/pycharm.sh"
+	make_wrapper ${PN} ${dir}/bin/pycharm.sh
 	newicon bin/${MY_PN}.png ${PN}.png
 	make_desktop_entry ${PN} ${PN} ${PN}
 
