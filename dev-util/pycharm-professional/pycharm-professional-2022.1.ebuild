@@ -45,7 +45,8 @@ RDEPEND="!bundled-jdk? ( >=virtual/jre-1.8 )
 	x11-libs/libxkbcommon
 	x11-libs/libXrandr
 	x11-libs/libXrender
-	x11-libs/libxshmfence
+	x11-libs/cairo
+	x11-libs/pango
 	x11-libs/libXtst
 	x11-libs/libXxf86vm
 "
@@ -67,6 +68,7 @@ src_prepare() {
 		plugins/performanceTesting/bin/*.dll
 		plugins/performanceTesting/bin/libyjpagent.dylib
 		plugins/python/helpers/pydev/pydevd_attach_to_process/attach_linux_x86.so
+		plugins/python/helpers/pydev/pydevd_attach_to_process/attach_linux_amd64.so
 		plugins/wsl-fs-helper
 	)
 
@@ -100,7 +102,7 @@ src_install() {
 		rm -r "${jre_dir}" || die
 	fi
 
-	fperms 755 ${dir}/bin/{format.sh,fsnotifier,inspect.sh,ltedit.sh,printenv.py,pycharm.sh,restart.py}
+	fperms 755 ${dir}/bin/{format.sh,fsnotifier,inspect.sh,ltedit.sh,pycharm.sh,restart.py}
 
 	fperms 755 ${dir}/${jre_dir}/bin/{jaotc,java,javac,jcmd,jdb,jfr,jhsdb,jinfo,jjs,jmap,jps,jrunscript,jstack,jstat,keytool,pack200,rmid,rmiregistry,serialver,unpack200}
 	fperms 755 ${dir}/${jre_dir}/lib/{chrome-sandbox,jcef_helper,jexec,jspawnhelper}
