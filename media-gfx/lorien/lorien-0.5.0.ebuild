@@ -8,7 +8,7 @@ inherit wrapper
 DESCRIPTION="Infinite canvas drawing/whiteboarding app."
 HOMEPAGE="https://github.com/mbrlabs/Lorien"
 SRC_URI="https://github.com/mbrlabs/Lorien/releases/download/v${PV}/Lorien_${PV}_Linux.tar.xz"
-S="${WORKDIR}/Lorien_v${PV}_Linux"
+S="${WORKDIR}/Lorien_${PV}_Linux"
 
 LICENSE="MIT"
 SLOT="0"
@@ -20,7 +20,7 @@ BDEPEND=""
 
 src_prepare() {
 	default
-	mv Lorien lorien
+	mv Lorien.x86_64 lorien
 	mv Lorien.pck lorien.pck
 }
 
@@ -29,7 +29,6 @@ src_install() {
 
 	insinto ${dir}
 	doins -r *
-
 	fperms 755 ${dir}/lorien
 
 	make_wrapper ${PN} ${dir}/lorien

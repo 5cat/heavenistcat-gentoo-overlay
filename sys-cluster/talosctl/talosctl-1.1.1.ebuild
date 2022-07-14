@@ -22,7 +22,14 @@ src_unpack() {
 	ls -al
 }
 
+src_compile() {
+	default
+	chmod u+x ${PN}
+	./${PN} completion zsh > _talosctl
+}
 
 src_install() {
 	dobin ${PN}
+	insinto /usr/share/zsh/site-functions
+	dobin _talosctl
 }
