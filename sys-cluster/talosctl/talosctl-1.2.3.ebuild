@@ -19,7 +19,6 @@ BDEPEND=""
 src_unpack() {
 	mkdir ${WORKDIR}/${P}
 	cp ${DISTDIR}/${P} ${WORKDIR}/${P}/${PN}
-	ls -al
 }
 
 src_compile() {
