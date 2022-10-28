@@ -9,7 +9,7 @@ SRC_URI="https://github.com/fluxcd/flux2/releases/download/v${PV}/flux_${PV}_lin
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="amd64"
 
 DEPEND=""
 RDEPEND="${DEPEND}"
