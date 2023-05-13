@@ -33,6 +33,7 @@ RDEPEND="
 	dev-python/requests[${PYTHON_USEDEP}]
 	gui? (
 		dev-python/pystray[${PYTHON_USEDEP}]
+		dev-python/pygobject[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '
 			dev-python/pillow[tk?,${PYTHON_USEDEP}]
 		')
