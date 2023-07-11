@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	=dev-python/poetry-core-1.6.0[${PYTHON_USEDEP}]
+	=dev-python/poetry-core-1.6*[${PYTHON_USEDEP}]
 	=dev-python/build-0*[${PYTHON_USEDEP}]
 	=dev-python/cachecontrol-0*[${PYTHON_USEDEP}]
 	=dev-python/cleo-2*[${PYTHON_USEDEP}]
