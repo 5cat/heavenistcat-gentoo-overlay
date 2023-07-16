@@ -5,14 +5,16 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{8..11} )
-inherit distutils-r1
+PYPI_NO_NORMALIZE=1
+
+inherit distutils-r1 pypi
 
 DESCRIPTION="Python API Client for Jellyfin"
 HOMEPAGE="
 	https://github.com/jellyfin/jellyfin-apiclient-python
 	https://pypi.org/project/jellyfin-apiclient-python/
 "
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+
 
 LICENSE="GPLv3"
 SLOT="0"

@@ -5,14 +5,16 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{8..11} )
-inherit distutils-r1
+PYPI_NO_NORMALIZE=1
+
+inherit distutils-r1 pypi
 
 DESCRIPTION="Python API to MPV using JSON IPC"
 HOMEPAGE="
 	https://github.com/iwalton3/python-mpv-jsonipc
 	https://pypi.org/project/python-mpv-jsonipc/
 "
-SRC_URI="mirror://pypi/${P:0:1}/${PN}/${P}.tar.gz"
+
 
 LICENSE="Apache-2.0"
 SLOT="0"

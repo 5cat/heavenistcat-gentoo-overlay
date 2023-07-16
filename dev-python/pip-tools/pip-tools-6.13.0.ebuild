@@ -5,13 +5,15 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{10..12} )
-inherit distutils-r1
+PYPI_NO_NORMALIZE=1
+
+inherit distutils-r1 pypi
 
 DESCRIPTION="A set of tools to keep your pinned Python dependencies fresh."
 HOMEPAGE="
 	https://pypi.org/project/pip-tools/
 "
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
+
 
 RESTRICT="test"
 
