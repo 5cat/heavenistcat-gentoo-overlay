@@ -14,10 +14,20 @@ LICENSE="AGPL-3.0"
 SLOT="0"
 KEYWORDS="~amd64"
 
-DEPEND=""
+DEPEND="
+	dev-vcs/git
+"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
+
+src_compile() {
+	default
+	files_to_delete="
+		resources/app/node_modules/dugite/git
+	"
+	rm -r ${files_to_delete} || die
+}
 
 src_install() {
 	local dir="/opt/${PN}"
